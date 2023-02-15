@@ -3,6 +3,14 @@
   let lastElement;
   let onlyPossibleMovements = [];
   let view = "";
+  
+  let twoSquaresMove = 0;
+  let enPassant = {
+    true: false,
+    piece: "",
+    toMove: 0,
+    toCapture: 0
+  };
 
   var count = 0;
   for (let row = 0; row < 8; row++) {
@@ -137,6 +145,11 @@
   }
 
   function whitePawnClick(element){
+    
+    if (element.target == squares[enPassant.toMove]) {
+      squares[enPassant.toCapture].textContent = "";
+    }
+    
     element.target.textContent = pieces.white.pawn;
     lastElement.textContent = "";
     while (onlyPossibleMovements.length) {onlyPossibleMovements.splice(0, 1);}
@@ -144,10 +157,48 @@
     removerEventListener(whiteCheckMovements);
     removerEventListener(whitePawnClick);
     removerEventListener(wM);
+    enPassant.true = false;
+    
+    if(view == "white"){
+      if (squares[twoSquaresMove] == element.target && squares[twoSquaresMove - 1].textContent == pieces.black.pawn){
+        enPassant.true = true;
+        enPassant.piece = twoSquaresMove - 1;
+        enPassant.toMove = twoSquaresMove + 8;
+        enPassant.toCapture = twoSquaresMove;
+      }
+      if (squares[twoSquaresMove] == element.target && squares[twoSquaresMove + 1].textContent == pieces.black.pawn) {
+        enPassant.true = true;
+        enPassant.piece = twoSquaresMove + 1;
+        enPassant.toMove = twoSquaresMove + 8;
+        enPassant.toCapture = twoSquaresMove;
+      }
+    }
+    
+    if (view == "black") {
+      if (squares[twoSquaresMove] == element.target && squares[twoSquaresMove - 1].textContent == pieces.black.pawn) {
+        enPassant.true = true;
+        enPassant.piece = twoSquaresMove - 1;
+        enPassant.toMove = twoSquaresMove - 8;
+        enPassant.toCapture = twoSquaresMove;
+      }
+      if (squares[twoSquaresMove] == element.target && squares[twoSquaresMove + 1].textContent == pieces.black.pawn) {
+        enPassant.true = true;
+        enPassant.piece = twoSquaresMove + 1;
+        enPassant.toMove = twoSquaresMove - 8;
+        enPassant.toCapture = twoSquaresMove;
+      }
+    }
+
+    twoSquaresMove = 0;
     blackMove();
   }
 
   function blackPawnClick(element){
+    
+    if (element.target == squares[enPassant.toMove]){
+      squares[enPassant.toCapture].textContent = "";
+    }
+    
     element.target.textContent = pieces.black.pawn;
     lastElement.textContent = "";
     while (onlyPossibleMovements.length) {onlyPossibleMovements.splice(0, 1);}
@@ -155,6 +206,39 @@
     removerEventListener(blackCheckMovements);
     removerEventListener(blackPawnClick);
     removerEventListener(bM);
+    enPassant.true = false;
+    
+    if (view == "white") {
+      if (squares[twoSquaresMove] == element.target && squares[twoSquaresMove - 1].textContent == pieces.white.pawn) {
+        enPassant.true = true;
+        enPassant.piece = twoSquaresMove - 1;
+        enPassant.toMove = twoSquaresMove - 8;
+        enPassant.toCapture = twoSquaresMove;
+      }
+      if (squares[twoSquaresMove] == element.target && squares[twoSquaresMove + 1].textContent == pieces.white.pawn) {
+        enPassant.true = true;
+        enPassant.piece = twoSquaresMove + 1;
+        enPassant.toMove = twoSquaresMove - 8;
+        enPassant.toCapture = twoSquaresMove;
+      }
+    }
+    
+    if (view == "black") {
+      if (squares[twoSquaresMove] == element.target && squares[twoSquaresMove - 1].textContent == pieces.black.pawn) {
+        enPassant.true = true;
+        enPassant.piece = twoSquaresMove - 1;
+        enPassant.toMove = twoSquaresMove + 8;
+        enPassant.toCapture = twoSquaresMove;
+      }
+      if (squares[twoSquaresMove] == element.target && squares[twoSquaresMove + 1].textContent == pieces.black.pawn) {
+        enPassant.true = true;
+        enPassant.piece = twoSquaresMove + 1;
+        enPassant.toMove = twoSquaresMove + 8;
+        enPassant.toCapture = twoSquaresMove;
+      }
+    }
+    
+    twoSquaresMove = 0;
     whiteMove();
   }
 
@@ -943,7 +1027,6 @@
     let move4;
     let move1w;
     let move1b;
-    //en passant
     //virar nova peça no fim do tabuleiro
     
     if (view == "white"){
@@ -958,6 +1041,12 @@
       move2 = i + 16;
       move3 = i + 7;
       move4 = i + 9;
+    }
+    
+    if (enPassant.true && squares[enPassant.piece].classList[1] == squares[enPassant.toCapture].classList[1]) {
+      m.push(enPassant.piece);
+      squares[enPassant.toMove].style.backgroundColor = "yellow"
+      squares[enPassant.toMove].addEventListener('click', whitePawnClick, { once: true });
     }
 
     if (move1 >= 0 && move1 < 64){
@@ -976,6 +1065,7 @@
       if (view == "white" && i >= 48){
         if(move2b == false && move2w == false && squares[i].classList[2] == squares[move2].classList[2] && move1w == false && move1b == false){
           m.push(move2);
+          twoSquaresMove = move2;
           squares[move2].style.backgroundColor = 'yellow';
           squares[move2].addEventListener('click', whitePawnClick, {once : true});
         }
@@ -983,6 +1073,7 @@
       if (view == "black" && i <= 15){
         if(move2b == false && move2w == false && squares[i].classList[2] == squares[move2].classList[2] && move1w == false && move1b == false){
           m.push(move2);
+          twoSquaresMove = move2;
           squares[move2].style.backgroundColor = 'yellow';
           squares[move2].addEventListener('click', whitePawnClick, {once : true});
         }
@@ -1039,6 +1130,12 @@
       move3 = i - 7;
       move4 = i - 9;
     }
+    
+    if (enPassant.true && squares[enPassant.piece].classList[1] == squares[enPassant.toCapture].classList[1]){
+      m.push(enPassant.piece);
+      squares[enPassant.toMove].style.backgroundColor = "yellow"
+      squares[enPassant.toMove].addEventListener('click', blackPawnClick, {once : true});
+    }
 
     if (move1 >= 0 && move1 < 64){
       move1b = anyBlackPiece(move1);
@@ -1056,6 +1153,7 @@
       if (view == "white" && i <= 15){
         if(move2b == false && move2w == false && squares[i].classList[2] == squares[move2].classList[2] && move1w == false && move1b == false){
           m.push(move2);
+          twoSquaresMove = move2;
           squares[move2].style.backgroundColor = 'yellow';
           squares[move2].addEventListener('click', blackPawnClick, {once : true});
         }
@@ -1063,6 +1161,7 @@
       if (view == "black" && i >= 48){
         if(move2b == false && move2w == false && squares[i].classList[2] == squares[move2].classList[2] && move1w == false && move1b == false){
           m.push(move2);
+          twoSquaresMove = move2;
           squares[move2].style.backgroundColor = 'yellow';
           squares[move2].addEventListener('click', blackPawnClick, {once : true});
         }
@@ -1452,3 +1551,6 @@
     }
     return m;
   }
+  
+  
+  //remover view das pawn functions, variavel e global
