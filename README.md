@@ -27,4 +27,4 @@ Add: undo and redo button.
 Add: match replays.
 and more.
 
-(code with comments will prob not always be up to date)
+(code with comments will prob not always be up to date).
