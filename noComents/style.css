@@ -1,0 +1,25 @@
+.chessboard {
+    display: flex;
+    flex-wrap: wrap;
+    width: 640px;
+  }
+  
+  .square {
+    width: 80px;
+    height: 80px;
+    box-sizing: border-box;
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+  }
+  
+  .black {
+    background-color: #333333;
+  }
+  
+  .white {
+    background-color: #ffffff;
+  }
+  
