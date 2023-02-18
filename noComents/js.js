@@ -11,6 +11,19 @@
     toMove: 0,
     toCapture: 0
   };
+  
+  let whiteKingMoved = false;
+  let whiteRookOneMoved = false;
+  let whiteRookTwoMoved = false;
+  
+  let blackKingMoved = false;
+  let blackRookOneMoved = false;
+  let blackRookTwoMoved = false;
+  
+  let rook1 = {};
+  let rook2 = {};
+  let rook3 = {};
+  let rook4 = {};
 
   var count = 0;
   for (let row = 0; row < 8; row++) {
@@ -107,14 +120,14 @@
 
     view = "white";
   }
-  whiteView()
+  //whiteView()
 
   function blackView(){
     squares[0].textContent = pieces.white.rook;
     squares[1].textContent = pieces.white.knight;
     squares[2].textContent = pieces.white.bishop;
-    squares[3].textContent = pieces.white.queen;
-    squares[4].textContent = pieces.white.king;
+    squares[3].textContent = pieces.white.king;
+    squares[4].textContent = pieces.white.queen;
     squares[5].textContent = pieces.white.bishop;
     squares[6].textContent = pieces.white.knight;
     squares[7].textContent = pieces.white.rook;
@@ -128,15 +141,15 @@
     squares[56].textContent = pieces.black.rook;
     squares[57].textContent = pieces.black.knight;
     squares[58].textContent = pieces.black.bishop;
-    squares[59].textContent = pieces.black.queen;
-    squares[60].textContent = pieces.black.king;
+    squares[59].textContent = pieces.black.king;
+    squares[60].textContent = pieces.black.queen;
     squares[61].textContent = pieces.black.bishop;
     squares[62].textContent = pieces.black.knight;
     squares[63].textContent = pieces.black.rook;
 
     view = "black";
   }
-  //blackView()
+  blackView()
 
   function removerEventListener(p){
     squares.forEach(e => {
@@ -245,6 +258,26 @@
   function whiteRookClick(element){
     element.target.textContent = pieces.white.rook;
     lastElement.textContent = "";
+    
+    if(view == "white"){
+      if(lastElement.classList[5] == 56){
+        whiteRookOneMoved = true;
+      }
+      if (lastElement.classList[5] == 63) {
+        whiteRookTwoMoved = true;
+      }
+    }
+    
+    if (view == "black") {
+      if (lastElement.classList[5] == 0) {
+        whiteRookOneMoved = true;
+      }
+      if (lastElement.classList[5] == 7) {
+        whiteRookTwoMoved = true;
+      }
+    }
+
+    
     while (onlyPossibleMovements.length) {onlyPossibleMovements.splice(0, 1);}
     resetBoardColor();
     removerEventListener(whiteCheckMovements);
@@ -256,6 +289,25 @@
   function blackRookClick(element){
     element.target.textContent = pieces.black.rook;
     lastElement.textContent = "";
+    
+    if (view == "white") {
+      if (lastElement.classList[5] == 0) {
+        blackRookOneMoved = true;
+      }
+      if (lastElement.classList[5] == 7) {
+        blackRookTwoMoved = true;
+      }
+    }
+    
+    if (view == "black") {
+      if (lastElement.classList[5] == 56) {
+        blackRookOneMoved = true;
+      }
+      if (lastElement.classList[5] == 63) {
+        blackRookTwoMoved = true;
+      }
+    }
+    
     while (onlyPossibleMovements.length) {onlyPossibleMovements.splice(0, 1);}
     resetBoardColor();
     removerEventListener(blackCheckMovements);
@@ -334,17 +386,42 @@
   function whiteKingClick(element){
     element.target.textContent = pieces.white.king;
     lastElement.textContent = "";
+    whiteKingMoved = true;
+    
+    if(rook1.true || rook2.true || rook3.true || rook4.true){
+      if(element.target.classList[5] == rook1.kingGoTo){
+        squares[rook1.rookStart].textContent = "";
+        squares[rook1.rookGoTo].textContent = pieces.white.rook;
+      }
+      if (element.target.classList[5] == rook2.kingGoTo) {
+        squares[rook2.rookStart].textContent = "";
+        squares[rook2.rookGoTo].textContent = pieces.white.rook;
+      }
+      if (element.target.classList[5] == rook3.kingGoTo) {
+        squares[rook3.rookStart].textContent = "";
+        squares[rook3.rookGoTo].textContent = pieces.white.rook;
+      }
+      if (element.target.classList[5] == rook4.kingGoTo) {
+        squares[rook4.rookStart].textContent = "";
+        squares[rook4.rookGoTo].textContent = pieces.white.rook;
+      }
+    }
+    
     while (onlyPossibleMovements.length) {onlyPossibleMovements.splice(0, 1);}
     resetBoardColor();
     removerEventListener(whiteCheckMovements);
     removerEventListener(whiteKingClick);
     removerEventListener(wM);
+  
     blackMove()
   }
 
   function blackKingClick(element){
     element.target.textContent = pieces.black.king;
     lastElement.textContent = "";
+    
+    blackKingMoved = true;
+    
     while (onlyPossibleMovements.length) {onlyPossibleMovements.splice(0, 1);}
     resetBoardColor();
     removerEventListener(blackCheckMovements);
@@ -1505,9 +1582,69 @@
         squares[element].style.backgroundColor = 'yellow'
       }
     }
+    
+    if(view == "white" && whiteKingMoved == false){
+      rook1 = {
+        true: false,
+        kingStart: 60,
+        rookStart: 56,
+        kingGoTo: 58,
+        rookGoTo: 59
+        };
+      
+      rook2 = {
+        true: false,
+        kingStart: 60,
+        rookStart: 63,
+        kingGoTo: 62,
+        rookGoTo: 61
+      }
+      
+      if(whiteRookOneMoved == false && squares[57].textContent == "" && squares[58].textContent == "" && squares[59].textContent == ""){
+        rook1.true = true;
+        squares[rook1.kingGoTo].addEventListener('click', whiteKingClick, { once: true })
+        squares[rook1.kingGoTo].style.backgroundColor = 'yellow'
+      }
+      if (whiteRookTwoMoved == false && squares[61].textContent == "" && squares[62].textContent == "") {
+        rook2.true = true;
+        squares[rook2.kingGoTo].addEventListener('click', whiteKingClick, { once: true })
+        squares[rook2.kingGoTo].style.backgroundColor = 'yellow'
+      }
+    }
+    
+    if (view == "black" && whiteKingMoved == false) {
+      rook3 = {
+        true: false,
+        kingStart: 3,
+        rookStart: 0,
+        kingGoTo: 1,
+        rookGoTo: 2
+      };
+  
+      rook4 = {
+        true: false,
+        kingStart: 3,
+        rookStart: 7,
+        kingGoTo: 5,
+        rookGoTo: 4
+      }
+    
+      if (whiteRookOneMoved == false && squares[2].textContent == "" && squares[1].textContent == "") {
+        rook3.true = true;
+        squares[rook3.kingGoTo].addEventListener('click', whiteKingClick, { once: true })
+        squares[rook3.kingGoTo].style.backgroundColor = 'yellow'
+      }
+      if (whiteRookTwoMoved == false && squares[4].textContent == "" && squares[5].textContent == "" && squares[6].textContent == "") {
+        rook4.true = true;
+        squares[rook4.kingGoTo].addEventListener('click', whiteKingClick, { once: true })
+        squares[rook4.kingGoTo].style.backgroundColor = 'yellow'
+      }
+    }
+    
     while (possibleMoves.length) {
       possibleMoves.splice(0, 1);
     }
+    
     return m;
   }
 
