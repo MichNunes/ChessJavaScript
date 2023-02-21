@@ -1721,13 +1721,13 @@
 
       if(blackRookOneMoved == false && squares[1].textContent == "" && squares[2].textContent == "" && squares[3].textContent == ""){
         rook3.true = true;
-        squares[rook1.kingGoTo].addEventListener('click', blackKingClick, { once: true })
-        squares[rook1.kingGoTo].style.backgroundColor = 'yellow'
+        squares[rook3.kingGoTo].addEventListener('click', blackKingClick, { once: true })
+        squares[rook3.kingGoTo].style.backgroundColor = 'yellow'
       }
       if(blackRookTwoMoved == false && squares[5].textContent == "" && squares[6].textContent == ""){
         rook4.true = true;
-        squares[rook1.kingGoTo].addEventListener('click', blackKingClick, { once: true })
-        squares[rook1.kingGoTo].style.backgroundColor = 'yellow'
+        squares[rook4.kingGoTo].addEventListener('click', blackKingClick, { once: true })
+        squares[rook4.kingGoTo].style.backgroundColor = 'yellow'
       }
     }
 
@@ -1756,8 +1756,8 @@
       }
       if(blackRookTwoMoved == false && squares[60].textContent == "" && squares[61].textContent == "" && squares[62].textContent == ""){
         rook2.true = true;
-        squares[rook1.kingGoTo].addEventListener('click', blackKingClick, { once: true })
-        squares[rook1.kingGoTo].style.backgroundColor = 'yellow'
+        squares[rook2.kingGoTo].addEventListener('click', blackKingClick, { once: true })
+        squares[rook2.kingGoTo].style.backgroundColor = 'yellow'
       }
     }
 
@@ -1939,3 +1939,7 @@
   }
 
   //FEN does not work properly on blackView()
+
+  //fen on black view
+  //load game from fen
+  //move log to start redo and undo button.
