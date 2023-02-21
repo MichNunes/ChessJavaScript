@@ -1,5 +1,14 @@
   const body = document.body;
   const chessboard = document.querySelector('.chessboard');
+
+  const pageFEN = document.createElement('p');
+  body.appendChild(pageFEN);
+
+  let FEN = "";
+  let moveFEN = "w";
+  let whitePawnMoved = {true: false, moved: 0};
+  let blackPawnMoved = {true: false, moved: 0};
+
   let lastElement;
   let onlyPossibleMovements = [];
   let view = "";
@@ -181,6 +190,8 @@
       if (piece == "king"){two = whiteKingClick; p = pieces.white.king}
       tree = wM;
       move = blackMove;
+      moveFEN = "b";
+      blackPawnMoved.true = false;
     }
 
     if (color == "black"){
@@ -193,6 +204,8 @@
       if (piece == "king"){two = blackKingClick; p = pieces.black.king}
       tree = bM;
       move = whiteMove;
+      moveFEN = "w";
+      whitePawnMoved.true = false;
     }
 
     //
@@ -229,6 +242,11 @@
 
     enPassant.true = false;
     enPassant2.true = false;
+
+    if (squares[twoSquaresMove] == element.target){
+      whitePawnMoved.true = true;
+      whitePawnMoved.moved = twoSquaresMove;
+    }
     
     if(view == "white"){
       if (squares[twoSquaresMove] == element.target && squares[twoSquaresMove - 1].textContent == pieces.black.pawn){
@@ -261,6 +279,11 @@
 
     enPassant.true = false;
     enPassant2.true = false;
+
+    if (squares[twoSquaresMove] == element.target){
+      blackPawnMoved.true = true;
+      blackPawnMoved.moved = twoSquaresMove;
+    }
     
     if (view == "white") {
       if (squares[twoSquaresMove] == element.target && squares[twoSquaresMove - 1].textContent == pieces.white.pawn) {
@@ -434,6 +457,8 @@
 
   function blackMove(){
 
+    getFEN();
+
     let whites = blackKingCheck();
     let firstSquare;
 
@@ -577,6 +602,8 @@
 
   function whiteMove(){
 
+    getFEN();
+
     let blacks = whiteKingCheck();
     let firstSquare;
 
@@ -695,7 +722,6 @@
     while (allowOnlyPossible.length) {
       allowOnlyPossible.splice(0, 1);
     }
-    console.log(allowOnlyPossible)
   }
 
   function reset(){
@@ -1740,3 +1766,176 @@
     }
     return m;
   }
+
+
+
+  function getFEN(){
+
+    FEN = "";
+    let c = 0;
+
+    if (view == "white"){
+      for (const element of squares){
+
+        if(element.textContent == ""){
+          c++;
+        }
+
+        if(element.textContent == pieces.black.pawn){   if(c != 0){FEN = FEN + c + "p"; c = 0;} else {FEN = FEN + "p"}}
+        if(element.textContent == pieces.black.rook){   if(c != 0){FEN = FEN + c + "r"; c = 0;} else {FEN = FEN + "r"}}
+        if(element.textContent == pieces.black.knight){ if(c != 0){FEN = FEN + c + "n"; c = 0;} else {FEN = FEN + "n"}}
+        if(element.textContent == pieces.black.bishop){ if(c != 0){FEN = FEN + c + "b"; c = 0;} else {FEN = FEN + "b"}}
+        if(element.textContent == pieces.black.queen){  if(c != 0){FEN = FEN + c + "q"; c = 0;} else {FEN = FEN + "q"}}
+        if(element.textContent == pieces.black.king){   if(c != 0){FEN = FEN + c + "k"; c = 0;} else {FEN = FEN + "k"}}
+        if(element.textContent == pieces.white.pawn){   if(c != 0){FEN = FEN + c + "P"; c = 0;} else {FEN = FEN + "P"}}
+        if(element.textContent == pieces.white.rook){   if(c != 0){FEN = FEN + c + "R"; c = 0;} else {FEN = FEN + "R"}}
+        if(element.textContent == pieces.white.knight){ if(c != 0){FEN = FEN + c + "N"; c = 0;} else {FEN = FEN + "N"}}
+        if(element.textContent == pieces.white.bishop){ if(c != 0){FEN = FEN + c + "B"; c = 0;} else {FEN = FEN + "B"}}
+        if(element.textContent == pieces.white.queen){  if(c != 0){FEN = FEN + c + "Q"; c = 0;} else {FEN = FEN + "Q"}}
+        if(element.textContent == pieces.white.king){   if(c != 0){FEN = FEN + c + "K"; c = 0;} else {FEN = FEN + "K"}}
+
+        if(parseInt(element.classList[5]) == 7 || 
+          parseInt(element.classList[5]) == 15 || 
+          parseInt(element.classList[5]) == 23 || 
+          parseInt(element.classList[5]) == 31 || 
+          parseInt(element.classList[5]) == 39 || 
+          parseInt(element.classList[5]) == 47 || 
+          parseInt(element.classList[5]) == 55){
+        if(c != 0){FEN = FEN + c + "/"; c = 0;} else {FEN = FEN + "/"}
+        }
+      }
+    }
+
+    if (view == "black"){
+      ////////////////////////////////////
+      let revSquare = [];
+      for(let a = squares.length - 1; a >= 0; a--) {
+        revSquare.push(squares[a])
+      }
+
+      for (const element of revSquare){
+
+        if(element.textContent == ""){
+          c++;
+        }
+
+        if(element.textContent == pieces.black.pawn){   if(c != 0){FEN = FEN + c + "p"; c = 0;} else {FEN = FEN + "p"}}
+        if(element.textContent == pieces.black.rook){   if(c != 0){FEN = FEN + c + "r"; c = 0;} else {FEN = FEN + "r"}}
+        if(element.textContent == pieces.black.knight){ if(c != 0){FEN = FEN + c + "n"; c = 0;} else {FEN = FEN + "n"}}
+        if(element.textContent == pieces.black.bishop){ if(c != 0){FEN = FEN + c + "b"; c = 0;} else {FEN = FEN + "b"}}
+        if(element.textContent == pieces.black.queen){  if(c != 0){FEN = FEN + c + "q"; c = 0;} else {FEN = FEN + "q"}}
+        if(element.textContent == pieces.black.king){   if(c != 0){FEN = FEN + c + "k"; c = 0;} else {FEN = FEN + "k"}}
+        if(element.textContent == pieces.white.pawn){   if(c != 0){FEN = FEN + c + "P"; c = 0;} else {FEN = FEN + "P"}}
+        if(element.textContent == pieces.white.rook){   if(c != 0){FEN = FEN + c + "R"; c = 0;} else {FEN = FEN + "R"}}
+        if(element.textContent == pieces.white.knight){ if(c != 0){FEN = FEN + c + "N"; c = 0;} else {FEN = FEN + "N"}}
+        if(element.textContent == pieces.white.bishop){ if(c != 0){FEN = FEN + c + "B"; c = 0;} else {FEN = FEN + "B"}}
+        if(element.textContent == pieces.white.queen){  if(c != 0){FEN = FEN + c + "Q"; c = 0;} else {FEN = FEN + "Q"}}
+        if(element.textContent == pieces.white.king){   if(c != 0){FEN = FEN + c + "K"; c = 0;} else {FEN = FEN + "K"}}
+
+        if(parseInt(element.classList[5]) == 8 || 
+          parseInt(element.classList[5]) == 16 || 
+          parseInt(element.classList[5]) == 24 || 
+          parseInt(element.classList[5]) == 32 || 
+          parseInt(element.classList[5]) == 40 || 
+          parseInt(element.classList[5]) == 48 || 
+          parseInt(element.classList[5]) == 56){
+        if(c != 0){FEN = FEN + c + "/"; c = 0;} else {FEN = FEN + "/"}
+        }
+      }
+    }
+
+    FEN = FEN + ` ${moveFEN}`
+
+    let auxFEN = "";
+    if(whiteKingMoved == false && whiteRookTwoMoved == false){auxFEN = auxFEN + "K"}
+    if(whiteKingMoved == false && whiteRookOneMoved == false){auxFEN = auxFEN + "Q"}
+    if(blackKingMoved == false && blackRookTwoMoved == false){auxFEN = auxFEN + "k"}
+    if(blackKingMoved == false && blackRookOneMoved == false){auxFEN = auxFEN + "q"}
+    if(auxFEN == ""){
+      FEN = FEN + ` -`
+    } else {
+      FEN = FEN + ` ${auxFEN}`
+    }
+    
+    if(whitePawnMoved.true) {
+      if (view == "white"){
+
+        let eP = squares[whitePawnMoved.moved + 8]
+        let colRow;
+
+        if(parseInt(eP.classList[2].charAt(0)) == 0){colRow = "a3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 1){colRow = "b3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 2){colRow = "c3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 3){colRow = "d3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 4){colRow = "e3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 5){colRow = "f3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 6){colRow = "g3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 7){colRow = "h3"}
+
+        FEN = FEN + ` ${colRow}`;
+      }
+      if (view == "black"){
+
+        let eP = squares[whitePawnMoved.moved - 8]
+        let colRow;
+
+        if(parseInt(eP.classList[2].charAt(0)) == 0){colRow = "a6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 1){colRow = "b6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 2){colRow = "c6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 3){colRow = "d6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 4){colRow = "e6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 5){colRow = "f6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 6){colRow = "g6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 7){colRow = "h6"}
+
+        FEN = FEN + ` ${colRow}`;
+      }
+    }
+
+    if(blackPawnMoved.true) {
+      if (view == "white"){
+
+        let eP = squares[blackPawnMoved.moved - 8]
+        let colRow;
+
+        if(parseInt(eP.classList[2].charAt(0)) == 0){colRow = "a6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 1){colRow = "b6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 2){colRow = "c6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 3){colRow = "d6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 4){colRow = "e6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 5){colRow = "f6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 6){colRow = "g6"}
+        if(parseInt(eP.classList[2].charAt(0)) == 7){colRow = "h6"}
+
+        FEN = FEN + ` ${colRow}`;
+      }
+      if (view == "black"){
+
+        let eP = squares[blackPawnMoved.moved + 8]
+        let colRow;
+
+        if(parseInt(eP.classList[2].charAt(0)) == 0){colRow = "a3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 1){colRow = "b3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 2){colRow = "c3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 3){colRow = "d3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 4){colRow = "e3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 5){colRow = "f3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 6){colRow = "g3"}
+        if(parseInt(eP.classList[2].charAt(0)) == 7){colRow = "h3"}
+
+        FEN = FEN + ` ${colRow}`;
+      }
+    }
+
+    if (whitePawnMoved.true == false && blackPawnMoved.true == false){
+      FEN = FEN + ` -`;
+    }
+
+    FEN = FEN + " 0 1"
+    //should have some calc in here but none of the sites use it
+
+    pageFEN.textContent = `FEN: ${FEN}`;
+    return FEN;
+  }
+
+  //FEN does not work properly on blackView()
