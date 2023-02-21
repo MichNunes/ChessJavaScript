@@ -15,10 +15,7 @@ I was not sure if I was gonna to be able to pass the check and checkmate stuff, 
 
 # To do:
 
-Pawn: en passant.
 Pawn: promotion.
-
-King: rook.
 
 Add: a button to switch point of view and mirror the board, putting all pieces on it respective position.
 Add: single player mode, with automatic moves for the CPU.
