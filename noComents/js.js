@@ -4,42 +4,6 @@
   const pageFEN = document.createElement('p');
   body.appendChild(pageFEN);
 
-  let FEN = "";
-  let moveFEN = "w";
-  let whitePawnMoved = {true: false, moved: 0};
-  let blackPawnMoved = {true: false, moved: 0};
-
-  let lastElement;
-  let onlyPossibleMovements = [];
-  let view = "";
-  
-  let twoSquaresMove = 0;
-  let enPassant = {
-    true: false,
-    piece: "",
-    toMove: 0,
-    toCapture: 0
-  };
-  let enPassant2 = {
-    true: false,
-    piece: "",
-    toMove: 0,
-    toCapture: 0
-  };
-  
-  let whiteKingMoved = false;
-  let whiteRookOneMoved = false;
-  let whiteRookTwoMoved = false;
-  
-  let blackKingMoved = false;
-  let blackRookOneMoved = false;
-  let blackRookTwoMoved = false;
-  
-  let rook1 = {};
-  let rook2 = {};
-  let rook3 = {};
-  let rook4 = {};
-
   var count = 0;
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
@@ -58,6 +22,39 @@
   }
 
   const squares = chessboard.querySelectorAll('.square');
+  let lastElement;
+  let onlyPossibleMovements = [];
+  let view = "";
+
+  let FEN = "";
+  let moveFEN = "w";
+  let whitePawnMoved = {true: false, moved: 0};
+  let blackPawnMoved = {true: false, moved: 0};
+
+  let twoSquaresMove = 0;
+  let enPassant = {
+    true: false,
+    piece: "",
+    toMove: 0,
+    toCapture: 0
+  };
+  let enPassant2 = {
+    true: false,
+    piece: "",
+    toMove: 0,
+    toCapture: 0
+  };
+  
+  let whiteKingMoved = false;
+  let whiteRookOneMoved = false;
+  let whiteRookTwoMoved = false;
+  let blackKingMoved = false;
+  let blackRookOneMoved = false;
+  let blackRookTwoMoved = false;
+  let rook1 = {};
+  let rook2 = {};
+  let rook3 = {};
+  let rook4 = {};
 
   function resetBoardColor(){
     for (const element of squares) {
@@ -135,7 +132,7 @@
 
     view = "white";
   }
-  whiteView()
+  //whiteView()
 
   function blackView(){
     squares[0].textContent = pieces.white.rook;
@@ -164,7 +161,7 @@
 
     view = "black";
   }
-  //blackView()
+  blackView()
 
   function removerEventListener(p){
     squares.forEach(e => {
@@ -434,25 +431,13 @@
     reset();
     lastElement = element.target;
     resetBoardColor();
-    var n = parseInt(lastElement.classList[5]);
-    if (lastElement.textContent === pieces.black.pawn){
-      blackPawn(n, false);
-    }
-    if (lastElement.textContent === pieces.black.rook){
-      blackRook(n, false);
-    }
-    if (lastElement.textContent === pieces.black.bishop){
-      blackBishop(n, false);
-    }
-    if (lastElement.textContent === pieces.black.knight){
-      blackKnight(n, false);
-    }
-    if (lastElement.textContent === pieces.black.queen){
-      blackQueen(n, false);
-    }
-    if (lastElement.textContent === pieces.black.king){
-      blackKing(n, false);
-    }
+    var i = parseInt(lastElement.classList[5]);
+    if (lastElement.textContent === pieces.black.pawn)  {blackPawn(i, false);}
+    if (lastElement.textContent === pieces.black.rook)  {blackRook(i, false);}
+    if (lastElement.textContent === pieces.black.bishop){blackBishop(i, false);}
+    if (lastElement.textContent === pieces.black.knight){blackKnight(i, false);}
+    if (lastElement.textContent === pieces.black.queen) {blackQueen(i, false);}
+    if (lastElement.textContent === pieces.black.king)  {blackKing(i, false);}
   }
 
   function blackMove(){
@@ -466,8 +451,7 @@
       let blacks = whiteKingCheck();
 
       for (const element of blacks.moves){
-        let aux = element.piece;
-        firstSquare = squares[aux];
+        firstSquare = squares[element.piece];
         let p = firstSquare.textContent;
         for (const e of element.move){
 
@@ -579,25 +563,13 @@
     reset();
     lastElement = element.target;
     resetBoardColor();
-    var n = parseInt(lastElement.classList[5]);
-    if (lastElement.textContent === pieces.white.pawn){
-      whitePawn(n, false);
-    }
-    if (lastElement.textContent === pieces.white.rook){
-      whiteRook(n, false);
-    }
-    if (lastElement.textContent === pieces.white.bishop){
-      whiteBishop(n, false);
-    }
-    if (lastElement.textContent === pieces.white.knight){
-      whiteKnight(n, false);
-    }
-    if (lastElement.textContent === pieces.white.queen){
-      whiteQueen(n, false);
-    }
-    if (lastElement.textContent === pieces.white.king){
-      whiteKing(n, false);
-    }
+    var i = parseInt(lastElement.classList[5]);
+    if (lastElement.textContent === pieces.white.pawn)  {whitePawn(i, false);}
+    if (lastElement.textContent === pieces.white.rook)  {whiteRook(i, false);}
+    if (lastElement.textContent === pieces.white.bishop){whiteBishop(i, false);}
+    if (lastElement.textContent === pieces.white.knight){whiteKnight(i, false);}
+    if (lastElement.textContent === pieces.white.queen) {whiteQueen(i, false);}
+    if (lastElement.textContent === pieces.white.king)  {whiteKing(i, false);}
   }
 
   function whiteMove(){
@@ -608,11 +580,11 @@
     let firstSquare;
 
     if (blacks.check){
+
       let whites = blackKingCheck();
 
       for (const element of whites.moves){
-        let aux = element.piece;
-        firstSquare = squares[aux];
+        firstSquare = squares[element.piece];
         let p = firstSquare.textContent;
         for (const e of element.move){
 
@@ -929,16 +901,16 @@
 
     if(array.length > 0){
       for (const element of array){
-        if(any1(element.classList[5])){
+        if(any1(parseInt(element.classList[5]))){
           break
         }
-        if(any2(element.classList[5])){
-          m.push(element.classList[5])
+        if(any2(parseInt(element.classList[5]))){
+          m.push(parseInt(element.classList[5]))
           element.addEventListener('click', p, {once : true});
           element.style.backgroundColor = 'yellow';
           break
         } else {
-          m.push(element.classList[5])
+          m.push(parseInt(element.classList[5]))
           element.addEventListener('click', p, {once : true});
           element.style.backgroundColor = 'yellow';
         };
@@ -965,7 +937,7 @@
     let whiteMoves = [];
 
     for(const element of squares){
-      let i = element.classList[5];
+      let i = parseInt(element.classList[5]);
       if(anyWhitePiece(i)){
         var piece = element.textContent;
         if(piece == pieces.white.pawn){
@@ -1767,8 +1739,6 @@
     return m;
   }
 
-
-
   function getFEN(){
 
     FEN = "";
@@ -1777,37 +1747,39 @@
     if (view == "white"){
       for (const element of squares){
 
-        if(element.textContent == ""){
+        let piece = element.textContent;
+        let squareNum = parseInt(element.classList[5]);
+
+        if(piece == ""){
           c++;
         }
 
-        if(element.textContent == pieces.black.pawn){   if(c != 0){FEN = FEN + c + "p"; c = 0;} else {FEN = FEN + "p"}}
-        if(element.textContent == pieces.black.rook){   if(c != 0){FEN = FEN + c + "r"; c = 0;} else {FEN = FEN + "r"}}
-        if(element.textContent == pieces.black.knight){ if(c != 0){FEN = FEN + c + "n"; c = 0;} else {FEN = FEN + "n"}}
-        if(element.textContent == pieces.black.bishop){ if(c != 0){FEN = FEN + c + "b"; c = 0;} else {FEN = FEN + "b"}}
-        if(element.textContent == pieces.black.queen){  if(c != 0){FEN = FEN + c + "q"; c = 0;} else {FEN = FEN + "q"}}
-        if(element.textContent == pieces.black.king){   if(c != 0){FEN = FEN + c + "k"; c = 0;} else {FEN = FEN + "k"}}
-        if(element.textContent == pieces.white.pawn){   if(c != 0){FEN = FEN + c + "P"; c = 0;} else {FEN = FEN + "P"}}
-        if(element.textContent == pieces.white.rook){   if(c != 0){FEN = FEN + c + "R"; c = 0;} else {FEN = FEN + "R"}}
-        if(element.textContent == pieces.white.knight){ if(c != 0){FEN = FEN + c + "N"; c = 0;} else {FEN = FEN + "N"}}
-        if(element.textContent == pieces.white.bishop){ if(c != 0){FEN = FEN + c + "B"; c = 0;} else {FEN = FEN + "B"}}
-        if(element.textContent == pieces.white.queen){  if(c != 0){FEN = FEN + c + "Q"; c = 0;} else {FEN = FEN + "Q"}}
-        if(element.textContent == pieces.white.king){   if(c != 0){FEN = FEN + c + "K"; c = 0;} else {FEN = FEN + "K"}}
+        if(piece == pieces.black.pawn){   if(c != 0){FEN = FEN + c + "p"; c = 0;} else {FEN = FEN + "p"}}
+        if(piece == pieces.black.rook){   if(c != 0){FEN = FEN + c + "r"; c = 0;} else {FEN = FEN + "r"}}
+        if(piece == pieces.black.knight){ if(c != 0){FEN = FEN + c + "n"; c = 0;} else {FEN = FEN + "n"}}
+        if(piece == pieces.black.bishop){ if(c != 0){FEN = FEN + c + "b"; c = 0;} else {FEN = FEN + "b"}}
+        if(piece == pieces.black.queen){  if(c != 0){FEN = FEN + c + "q"; c = 0;} else {FEN = FEN + "q"}}
+        if(piece == pieces.black.king){   if(c != 0){FEN = FEN + c + "k"; c = 0;} else {FEN = FEN + "k"}}
+        if(piece == pieces.white.pawn){   if(c != 0){FEN = FEN + c + "P"; c = 0;} else {FEN = FEN + "P"}}
+        if(piece == pieces.white.rook){   if(c != 0){FEN = FEN + c + "R"; c = 0;} else {FEN = FEN + "R"}}
+        if(piece == pieces.white.knight){ if(c != 0){FEN = FEN + c + "N"; c = 0;} else {FEN = FEN + "N"}}
+        if(piece == pieces.white.bishop){ if(c != 0){FEN = FEN + c + "B"; c = 0;} else {FEN = FEN + "B"}}
+        if(piece == pieces.white.queen){  if(c != 0){FEN = FEN + c + "Q"; c = 0;} else {FEN = FEN + "Q"}}
+        if(piece == pieces.white.king){   if(c != 0){FEN = FEN + c + "K"; c = 0;} else {FEN = FEN + "K"}}
 
-        if(parseInt(element.classList[5]) == 7 || 
-          parseInt(element.classList[5]) == 15 || 
-          parseInt(element.classList[5]) == 23 || 
-          parseInt(element.classList[5]) == 31 || 
-          parseInt(element.classList[5]) == 39 || 
-          parseInt(element.classList[5]) == 47 || 
-          parseInt(element.classList[5]) == 55){
+        if(squareNum == 7 || 
+          squareNum == 15 || 
+          squareNum == 23 || 
+          squareNum == 31 || 
+          squareNum == 39 || 
+          squareNum == 47 || 
+          squareNum == 55){
         if(c != 0){FEN = FEN + c + "/"; c = 0;} else {FEN = FEN + "/"}
         }
       }
     }
 
     if (view == "black"){
-      ////////////////////////////////////
       let revSquare = [];
       for(let a = squares.length - 1; a >= 0; a--) {
         revSquare.push(squares[a])
@@ -1815,30 +1787,33 @@
 
       for (const element of revSquare){
 
-        if(element.textContent == ""){
+        let piece = element.textContent;
+        let squareNum = parseInt(element.classList[5]);
+
+        if(piece == ""){
           c++;
         }
 
-        if(element.textContent == pieces.black.pawn){   if(c != 0){FEN = FEN + c + "p"; c = 0;} else {FEN = FEN + "p"}}
-        if(element.textContent == pieces.black.rook){   if(c != 0){FEN = FEN + c + "r"; c = 0;} else {FEN = FEN + "r"}}
-        if(element.textContent == pieces.black.knight){ if(c != 0){FEN = FEN + c + "n"; c = 0;} else {FEN = FEN + "n"}}
-        if(element.textContent == pieces.black.bishop){ if(c != 0){FEN = FEN + c + "b"; c = 0;} else {FEN = FEN + "b"}}
-        if(element.textContent == pieces.black.queen){  if(c != 0){FEN = FEN + c + "q"; c = 0;} else {FEN = FEN + "q"}}
-        if(element.textContent == pieces.black.king){   if(c != 0){FEN = FEN + c + "k"; c = 0;} else {FEN = FEN + "k"}}
-        if(element.textContent == pieces.white.pawn){   if(c != 0){FEN = FEN + c + "P"; c = 0;} else {FEN = FEN + "P"}}
-        if(element.textContent == pieces.white.rook){   if(c != 0){FEN = FEN + c + "R"; c = 0;} else {FEN = FEN + "R"}}
-        if(element.textContent == pieces.white.knight){ if(c != 0){FEN = FEN + c + "N"; c = 0;} else {FEN = FEN + "N"}}
-        if(element.textContent == pieces.white.bishop){ if(c != 0){FEN = FEN + c + "B"; c = 0;} else {FEN = FEN + "B"}}
-        if(element.textContent == pieces.white.queen){  if(c != 0){FEN = FEN + c + "Q"; c = 0;} else {FEN = FEN + "Q"}}
-        if(element.textContent == pieces.white.king){   if(c != 0){FEN = FEN + c + "K"; c = 0;} else {FEN = FEN + "K"}}
+        if(piece == pieces.black.pawn){   if(c != 0){FEN = FEN + c + "p"; c = 0;} else {FEN = FEN + "p"}}
+        if(piece == pieces.black.rook){   if(c != 0){FEN = FEN + c + "r"; c = 0;} else {FEN = FEN + "r"}}
+        if(piece == pieces.black.knight){ if(c != 0){FEN = FEN + c + "n"; c = 0;} else {FEN = FEN + "n"}}
+        if(piece == pieces.black.bishop){ if(c != 0){FEN = FEN + c + "b"; c = 0;} else {FEN = FEN + "b"}}
+        if(piece == pieces.black.queen){  if(c != 0){FEN = FEN + c + "q"; c = 0;} else {FEN = FEN + "q"}}
+        if(piece == pieces.black.king){   if(c != 0){FEN = FEN + c + "k"; c = 0;} else {FEN = FEN + "k"}}
+        if(piece == pieces.white.pawn){   if(c != 0){FEN = FEN + c + "P"; c = 0;} else {FEN = FEN + "P"}}
+        if(piece == pieces.white.rook){   if(c != 0){FEN = FEN + c + "R"; c = 0;} else {FEN = FEN + "R"}}
+        if(piece == pieces.white.knight){ if(c != 0){FEN = FEN + c + "N"; c = 0;} else {FEN = FEN + "N"}}
+        if(piece == pieces.white.bishop){ if(c != 0){FEN = FEN + c + "B"; c = 0;} else {FEN = FEN + "B"}}
+        if(piece == pieces.white.queen){  if(c != 0){FEN = FEN + c + "Q"; c = 0;} else {FEN = FEN + "Q"}}
+        if(piece == pieces.white.king){   if(c != 0){FEN = FEN + c + "K"; c = 0;} else {FEN = FEN + "K"}}
 
-        if(parseInt(element.classList[5]) == 8 || 
-          parseInt(element.classList[5]) == 16 || 
-          parseInt(element.classList[5]) == 24 || 
-          parseInt(element.classList[5]) == 32 || 
-          parseInt(element.classList[5]) == 40 || 
-          parseInt(element.classList[5]) == 48 || 
-          parseInt(element.classList[5]) == 56){
+        if(squareNum == 8 || 
+          squareNum == 16 || 
+          squareNum == 24 || 
+          squareNum == 32 || 
+          squareNum == 40 || 
+          squareNum == 48 || 
+          squareNum == 56){
         if(c != 0){FEN = FEN + c + "/"; c = 0;} else {FEN = FEN + "/"}
         }
       }
@@ -1860,33 +1835,33 @@
     if(whitePawnMoved.true) {
       if (view == "white"){
 
-        let eP = squares[whitePawnMoved.moved + 8]
+        let eP = parseInt(squares[whitePawnMoved.moved + 8].classList[2].charAt(0));
         let colRow;
 
-        if(parseInt(eP.classList[2].charAt(0)) == 0){colRow = "a3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 1){colRow = "b3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 2){colRow = "c3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 3){colRow = "d3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 4){colRow = "e3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 5){colRow = "f3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 6){colRow = "g3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 7){colRow = "h3"}
+        if(eP == 0){colRow = "a3"}
+        if(eP == 1){colRow = "b3"}
+        if(eP == 2){colRow = "c3"}
+        if(eP == 3){colRow = "d3"}
+        if(eP == 4){colRow = "e3"}
+        if(eP == 5){colRow = "f3"}
+        if(eP == 6){colRow = "g3"}
+        if(eP == 7){colRow = "h3"}
 
         FEN = FEN + ` ${colRow}`;
       }
       if (view == "black"){
 
-        let eP = squares[whitePawnMoved.moved - 8]
+        let eP = parseInt(squares[whitePawnMoved.moved - 8].classList[2].charAt(0));
         let colRow;
 
-        if(parseInt(eP.classList[2].charAt(0)) == 0){colRow = "a6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 1){colRow = "b6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 2){colRow = "c6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 3){colRow = "d6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 4){colRow = "e6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 5){colRow = "f6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 6){colRow = "g6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 7){colRow = "h6"}
+        if(eP == 0){colRow = "h3"}
+        if(eP == 1){colRow = "g3"}
+        if(eP == 2){colRow = "f3"}
+        if(eP == 3){colRow = "e3"}
+        if(eP == 4){colRow = "d3"}
+        if(eP == 5){colRow = "c3"}
+        if(eP == 6){colRow = "b3"}
+        if(eP == 7){colRow = "e3"}
 
         FEN = FEN + ` ${colRow}`;
       }
@@ -1895,33 +1870,33 @@
     if(blackPawnMoved.true) {
       if (view == "white"){
 
-        let eP = squares[blackPawnMoved.moved - 8]
+        let eP = parseInt(squares[blackPawnMoved.moved - 8].classList[2].charAt(0));
         let colRow;
 
-        if(parseInt(eP.classList[2].charAt(0)) == 0){colRow = "a6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 1){colRow = "b6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 2){colRow = "c6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 3){colRow = "d6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 4){colRow = "e6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 5){colRow = "f6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 6){colRow = "g6"}
-        if(parseInt(eP.classList[2].charAt(0)) == 7){colRow = "h6"}
+        if(eP == 0){colRow = "a6"}
+        if(eP == 1){colRow = "b6"}
+        if(eP == 2){colRow = "c6"}
+        if(eP == 3){colRow = "d6"}
+        if(eP == 4){colRow = "e6"}
+        if(eP == 5){colRow = "f6"}
+        if(eP == 6){colRow = "g6"}
+        if(eP == 7){colRow = "h6"}
 
         FEN = FEN + ` ${colRow}`;
       }
       if (view == "black"){
 
-        let eP = squares[blackPawnMoved.moved + 8]
+        let eP = parseInt(squares[blackPawnMoved.moved + 8].classList[2].charAt(0));
         let colRow;
 
-        if(parseInt(eP.classList[2].charAt(0)) == 0){colRow = "a3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 1){colRow = "b3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 2){colRow = "c3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 3){colRow = "d3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 4){colRow = "e3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 5){colRow = "f3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 6){colRow = "g3"}
-        if(parseInt(eP.classList[2].charAt(0)) == 7){colRow = "h3"}
+        if(eP == 0){colRow = "h6"}
+        if(eP == 1){colRow = "g6"}
+        if(eP == 2){colRow = "f6"}
+        if(eP == 3){colRow = "e6"}
+        if(eP == 4){colRow = "d6"}
+        if(eP == 5){colRow = "c6"}
+        if(eP == 6){colRow = "b6"}
+        if(eP == 7){colRow = "a6"}
 
         FEN = FEN + ` ${colRow}`;
       }
@@ -1938,8 +1913,5 @@
     return FEN;
   }
 
-  //FEN does not work properly on blackView()
-
-  //fen on black view
   //load game from fen
   //move log to start redo and undo button.
